@@ -60,14 +60,44 @@ class LinkedList:
 		#if it's 0 we just change the head and te correspondent index
 		elif index == 0:
 			newHead = self.head.next
+			oldHead = self.head
 			self.head = newHead
 			self.length -=1 
-			return
+			return oldHead #added this, useful for reverse
 			
 		#otherwise we find the note before and update indexes
 		currentNode = self.findNodeOnIndex(index-1)
+		deletedNode = currentNode.next
 		currentNode.next = currentNode.next.next
 		self.length -=1 
+		return deletedNode #added this, useful for reverse
+		
+	#reverses the linked list
+	def reverse(self):
+		if self.length == 1:
+			return self
+		reverseLinkedList = LinkedList(self.tail.value) #creates a new list with the value of the other one's tail
+		self.remove(self.length-1) #removes the tail
+		while self.head != None: #while the current linkedList is not empty
+			reverseLinkedList.append(self.remove(self.length-1).value) #we keep appending the last element to the reversed one
+		self.head = reverseLinkedList.head #we make the new linkedList as the new one
+		self.tail = reverseLinkedList.tail
+		self.length = reverseLinkedList.length
+		return self
+		
+	def reverseNoExtraSpace(self):
+		if self.length == 1:
+			return self
+		first = self.head
+		self.tail = self.head
+		second = first.next
+		while(second is not None):
+			temp = second.next
+			second.next = first
+			first = second
+			second = temp
+		self.head.next = None
+		self.head = first
 		
 	#prints the linked list in order
 	def show(self):
@@ -87,9 +117,13 @@ myLinkedList.prepend(1)
 myLinkedList.show()
 myLinkedList.insert(2,4)
 myLinkedList.show()
-myLinkedList.remove(2)
+#myLinkedList.remove(2)
+#myLinkedList.show()
+#myLinkedList.remove(3)
+#myLinkedList.show()
+#myLinkedList.remove(0)
+#myLinkedList.show()
+myLinkedList.reverse()
 myLinkedList.show()
-myLinkedList.remove(3)
-myLinkedList.show()
-myLinkedList.remove(0)
+myLinkedList.reverseNoExtraSpace()
 myLinkedList.show()
